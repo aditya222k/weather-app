@@ -12,6 +12,7 @@ const kMessageTextStyle = TextStyle(
 
 const kButtonTextStyle = TextStyle(
   fontSize: 30.0,
+  color: Colors.white,
   fontFamily: 'Spartan MB',
 );
 
@@ -19,5 +20,16 @@ const kConditionTextStyle = TextStyle(
   fontSize: 100.0,
 );
 
-const apiKey= 'bf578cae77350e81058299bb32a592f9';
+const apiKey = 'bf578cae77350e81058299bb32a592f9';
 
+const kTextFieldInputDecoration = InputDecoration(
+  filled: true,
+  icon: Icon(Icons.location_city),
+  hintText: 'Enter city location',
+  hintStyle: TextStyle(color: Colors.grey),
+  border: OutlineInputBorder(
+    borderRadius: BorderRadius.all(Radius.circular(10)),
+    borderSide: BorderSide.none,
+  ),
+  fillColor: Colors.white,
+);
