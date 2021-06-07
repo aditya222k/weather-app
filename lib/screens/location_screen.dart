@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:clima/utilities/constants.dart';
 import 'package:clima/services/weather.dart';
-import 'package:clima/screens/city_screen.dart';
 import 'package:lottie/lottie.dart';
+import 'package:clima/utilities/constants.dart';
 
 class LocationScreen extends StatefulWidget {
   LocationScreen({this.locationWeather});
@@ -30,11 +29,11 @@ class _LocationScreenState extends State<LocationScreen> {
 
   void updateUI(dynamic weatherData) {
     setState(() {
-      if(weatherData== null){
-        temperature =0;
+      if (weatherData == null) {
+        temperature = 0;
         weatherIcon = 'Error';
-        weatherMessage= 'Unable ot get weather data';
-        cityName ='';
+        weatherMessage = 'Unable ot get weather data';
+        cityName = '';
       }
       double temp = weatherData['main']['temp'];
       temperature = temp.toInt();
@@ -50,25 +49,125 @@ class _LocationScreenState extends State<LocationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(color: Colors.white,
-        width: double.infinity,
-        child:Column(
-          children: [
-            SizedBox(
-              height: 50,
-            ),
-            Align(alignment: Alignment.topRight,
-                child: Lottie.asset('Animations/weatherbaloon.json',height: 200,width: 200)),
-            Text('s',style: TextStyle(color: Colors.black),)
-
-          ],
-        )
-      )
-    );
+        backgroundColor: Colors.grey,
+        body: SafeArea(
+          child: Container(
+              width: double.infinity,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Text(
+                              'City name',
+                              style: TextStyle(fontSize: 45),
+                            ),
+                            Text(
+                              '25°',
+                              style: kTempTextStyle,
+                            ),
+                            Text(
+                              'Condition',
+                              style: TextStyle(fontSize: 45),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Align(
+                            alignment: Alignment.topRight,
+                            child: Lottie.asset('Animations/weatherbaloon.json',
+                                height: 320, width: 450)),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: Center(
+                      child: Container(
+                        height: 2,
+                        margin: EdgeInsetsDirectional.only(top: 0, bottom: 0),
+                        decoration: BoxDecoration(
+                          border: Border(
+                            left: Divider.createBorderSide(context,
+                                color: Colors.green,
+                                width: MediaQuery.of(context).size.width),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 25, 0, 25),
+                    child: Row(
+                      children: [
+                        BodyExpands(
+                          about: 'chance of Rain',
+                          temp: '25%',
+                        ),
+                        BodyExpands(
+                          about: 'Real feels',
+                          temp: '25°',
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    thickness: 2,
+                    indent: 55,
+                    endIndent: 55,
+                    color: Colors.pink,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 25, 0, 25),
+                    child: Row(
+                      children: [
+                        BodyExpands(
+                          about: 'Wind',
+                          temp: '25kph',
+                        ),
+                        BodyExpands(
+                          about: 'Humidity',
+                          temp: '25%',
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    thickness: 2,
+                    color: Colors.yellow,
+                  ),
+                ],
+              )),
+        ));
   }
 }
 
+class BodyExpands extends StatelessWidget {
+  BodyExpands({this.about, this.temp});
+  final String about;
+  final String temp;
 
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+        child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          about,
+          style: kSecondaryText,
+        ),
+        Text(
+          '$temp',
+          style: kSecondaryInfo,
+        ),
+      ],
+    ));
+  }
+}
 
 // Container(
 // color: Colors.grey,
