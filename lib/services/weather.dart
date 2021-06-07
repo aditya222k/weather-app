@@ -1,6 +1,8 @@
 import 'package:clima/services/networking.dart';
 import 'package:clima/utilities/constants.dart';
 import 'package:clima/services/location.dart';
+import 'package:lottie/lottie.dart';
+
 
 var openWeatherMapURL = 'http://api.openweathermap.org/data/2.5/weather';
 class WeatherModel {
@@ -33,7 +35,8 @@ class WeatherModel {
     } else if (condition < 700) {
       return '☃️';
     } else if (condition < 800) {
-      return '🌫';
+      var ani = 'Animations/haze.json';
+      return ani;
     } else if (condition == 800) {
       return '☀️';
     } else if (condition <= 804) {
