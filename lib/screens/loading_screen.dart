@@ -3,7 +3,6 @@ import 'package:clima/services/location.dart';
 import 'package:flutter/material.dart';
 import 'package:clima/utilities/constants.dart';
 import 'package:clima/services/networking.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lottie/lottie.dart';
 
 class LoadingScreen extends StatefulWidget {
@@ -12,7 +11,6 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -38,11 +36,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:
-      Center(
-
-          child: Lottie.asset('Animations/64144-rain-tweetstorm-cartoon.json')
-      ),
-      );
+      body: Center(
+          child: Lottie.asset('Animations/64144-rain-tweetstorm-cartoon.json')),
+    );
   }
 }

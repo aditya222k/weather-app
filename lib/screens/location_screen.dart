@@ -17,9 +17,16 @@ class _LocationScreenState extends State<LocationScreen> {
   WeatherModel weather = WeatherModel();
 
   int temperature;
+  int maxT;
+  int minT;
   String weatherIcon;
   String weatherMessage;
   String cityName;
+  String description;
+  int cloudCover;
+  double windSpeed;
+  int humidity;
+  int feelsLike;
 
   @override
   void initState() {
@@ -39,6 +46,16 @@ class _LocationScreenState extends State<LocationScreen> {
       temperature = temp.toInt();
       var condition = weatherData['weather'][0]['id'];
       cityName = weatherData['name'];
+      description = weatherData['weather'][0]['description'];
+      cloudCover = weatherData['clouds']['all'];
+      windSpeed = weatherData['wind']['speed'];
+      humidity = weatherData['main']['humidity'];
+      double maxTemp = weatherData['main']['temp_max'];
+      maxT = maxTemp.toInt();
+      double minTemp = weatherData['main']['temp_min'];
+      minT = minTemp.toInt();
+      double realFeels = weatherData['main']['feels_like'];
+      feelsLike = realFeels.toInt();
       weatherIcon = weather.getWeatherIcon(condition);
       weatherMessage = weather.getMessage(temperature);
     });
@@ -48,100 +65,174 @@ class _LocationScreenState extends State<LocationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.grey,
-        body: SafeArea(
-          child: Container(
-              width: double.infinity,
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          children: [
-                            Text(
-                              'City name',
-                              style: TextStyle(fontSize: 45),
-                            ),
-                            Text(
-                              '25°',
-                              style: kTempTextStyle,
-                            ),
-                            Text(
-                              'Condition',
-                              style: TextStyle(fontSize: 45),
-                            ),
-                          ],
+    return Container(
+      color: Color(0xFFFFFFFF),
+      child: SafeArea(
+        child: Scaffold(
+            backgroundColor: Colors.white,
+            body: SingleChildScrollView(
+                child: Column(
+              children: [
+                Row(
+                  children: [
+                    MaterialButton(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      //Weather of present location
+                      onPressed: () {
+                        setState(() {
+                          updateUI(widget.locationWeather);
+                        });
+                      },
+                      child: Icon(
+                        Icons.near_me,
+                        color: Colors.red,
+                        size: 55,
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Stack(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.fromLTRB(20, 80, 0, 0),
+                          // color: Colors.red,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Text(
+                                '$cityName',
+                                style: TextStyle(
+                                    fontSize: 25, color: Colors.black),
+                              ),
+                              Text(
+                                '$temperature°',
+                                style: kTempTextStyle,
+                              ),
+                              Text(
+                                '$maxT°/$minT° Feels like $feelsLike',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                '$description',
+                                style: TextStyle(
+                                    fontSize: 25, color: Colors.black),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          // color: Colors.red,
+                          width: MediaQuery.of(context).size.width,
+                          child: Align(
+                              alignment: Alignment.topRight,
+                              child: Lottie.asset(
+                                  'Animations/weatherbaloon.json',
+                                  height: 300,
+                                  width: 240)),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: Center(
+                    child: Container(
+                      height: 2,
+                      margin: EdgeInsetsDirectional.only(top: 0, bottom: 0),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          left: Divider.createBorderSide(context,
+                              color: Colors.grey[300],
+                              width: MediaQuery.of(context).size.width),
                         ),
                       ),
-                      Expanded(
-                        child: Align(
-                            alignment: Alignment.topRight,
-                            child: Lottie.asset('Animations/weatherbaloon.json',
-                                height: 320, width: 450)),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 25, 0, 25),
+                  child: Row(
+                    children: [
+                      BodyExpands(
+                        about: 'Cloud cover',
+                        temp: '$cloudCover%',
+                      ),
+                      BodyExpands(
+                        about: 'Real feels',
+                        temp: '$feelsLike°',
                       ),
                     ],
                   ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: Center(
-                      child: Container(
-                        height: 2,
-                        margin: EdgeInsetsDirectional.only(top: 0, bottom: 0),
-                        decoration: BoxDecoration(
-                          border: Border(
-                            left: Divider.createBorderSide(context,
-                                color: Colors.green,
-                                width: MediaQuery.of(context).size.width),
-                          ),
-                        ),
+                ),
+                Divider(
+                  thickness: 2,
+                  indent: 55,
+                  endIndent: 55,
+                  color: Colors.grey[300],
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 25, 0, 25),
+                  child: Row(
+                    children: [
+                      BodyExpands(
+                        about: 'Wind',
+                        temp: '${roundDouble(windSpeed * 18 / 5, 2)}kph',
                       ),
-                    ),
+                      BodyExpands(
+                        about: 'Humidity',
+                        temp: '$humidity%',
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 25, 0, 25),
-                    child: Row(
-                      children: [
-                        BodyExpands(
-                          about: 'chance of Rain',
-                          temp: '25%',
-                        ),
-                        BodyExpands(
-                          about: 'Real feels',
-                          temp: '25°',
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(
-                    thickness: 2,
-                    indent: 55,
-                    endIndent: 55,
-                    color: Colors.pink,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 25, 0, 25),
-                    child: Row(
-                      children: [
-                        BodyExpands(
-                          about: 'Wind',
-                          temp: '25kph',
-                        ),
-                        BodyExpands(
-                          about: 'Humidity',
-                          temp: '25%',
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(
-                    thickness: 2,
-                    color: Colors.yellow,
-                  ),
-                ],
-              )),
-        ));
+                ),
+                Divider(
+                  thickness: 2,
+                  color: Colors.grey[300],
+                ),
+                Container(
+                  child: SingleChildScrollView(
+                      physics: ClampingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              color: Colors.red,
+                              width: 150,
+                              height: 100,
+                            ),
+                          ),
+                          Container(
+                            color: Colors.green,
+                            width: 150,
+                            height: 100,
+                          ),
+                          Container(
+                            color: Colors.pink,
+                            width: 150,
+                            height: 100,
+                          ),
+                          Container(
+                            color: Colors.blue,
+                            width: 150,
+                            height: 100,
+                          ),
+                        ],
+                      )),
+                ),
+              ],
+            ))),
+      ),
+    );
   }
 }
 
