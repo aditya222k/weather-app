@@ -1,8 +1,11 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:clima/services/weather.dart';
 import 'package:lottie/lottie.dart';
 import 'package:clima/utilities/constants.dart';
+import 'city_screen.dart';
 
 class LocationScreen extends StatefulWidget {
   LocationScreen({this.locationWeather});
@@ -73,31 +76,55 @@ class _LocationScreenState extends State<LocationScreen> {
             body: SingleChildScrollView(
                 child: Column(
               children: [
-                Row(
-                  children: [
-                    MaterialButton(
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      //Weather of present location
-                      onPressed: () {
-                        setState(() {
-                          updateUI(widget.locationWeather);
-                        });
-                      },
-                      child: Icon(
-                        Icons.near_me,
-                        color: Colors.red,
-                        size: 55,
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      MaterialButton(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        //Weather of present location
+                        onPressed: () {
+                          setState(() {
+                            updateUI(widget.locationWeather);
+                          });
+                        },
+                        child: Icon(
+                          Icons.near_me,
+                          color: Colors.black,
+                          size: 55,
+                        ),
                       ),
-                    )
-                  ],
+                      MaterialButton(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        //Weather of present location
+                        onPressed: () async {
+                          var typedName = await Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return CityScreen();
+                          }));
+                          if (typedName != null) {
+                            var weatherData =
+                                await weather.getCityWeather('$typedName');
+                            updateUI(weatherData);
+                          }
+                        },
+                        child: Icon(
+                          Icons.add_business_rounded,
+                          color: Colors.black,
+                          size: 55,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 Row(
                   children: [
                     Stack(
                       children: [
                         Container(
-                          margin: EdgeInsets.fromLTRB(20, 80, 0, 0),
+                          margin: EdgeInsets.fromLTRB(30, 70, 0, 0),
                           // color: Colors.red,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -119,10 +146,15 @@ class _LocationScreenState extends State<LocationScreen> {
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600),
                               ),
-                              Text(
-                                '$description',
-                                style: TextStyle(
-                                    fontSize: 25, color: Colors.black),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                child: Text(
+                                  '$description',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600),
+                                ),
                               ),
                             ],
                           ),
@@ -203,29 +235,23 @@ class _LocationScreenState extends State<LocationScreen> {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              color: Colors.red,
-                              width: 150,
-                              height: 100,
+                          ClipRect(
+                            child: BackdropFilter(
+                              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                color: Colors.transparent,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('Wind'),
+                                    Row(),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
-                          Container(
-                            color: Colors.green,
-                            width: 150,
-                            height: 100,
-                          ),
-                          Container(
-                            color: Colors.pink,
-                            width: 150,
-                            height: 100,
-                          ),
-                          Container(
-                            color: Colors.blue,
-                            width: 150,
-                            height: 100,
-                          ),
+                          )
                         ],
                       )),
                 ),
