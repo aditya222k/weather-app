@@ -12,15 +12,15 @@ class WeatherModel {
     return weatherData;
   }
 
-  Future<dynamic> getLocationWeather() async {
-    Location location = Location();
-    await location.getCurrentLocation();
+  // Future<dynamic> getLocationWeather() async {
+  //   Location location = Location();
+  //   await location.getCurrentLocation();
 
-    NetworkHelper networkHelper = NetworkHelper(
-        "http://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=$apiKey&units=metric");
-    var weatherData = await networkHelper.getData();
-    return weatherData;
-  }
+  //   NetworkHelper networkHelper = NetworkHelper(
+  //       "http://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=$apiKey&units=metric");
+  //   var weatherData = await networkHelper.getData();
+  //   return weatherData;
+  // }
 
   String getWeatherIcon(int condition) {
     if (condition < 300) {
