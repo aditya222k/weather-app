@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clima/utilities/constants.dart';
+import 'location_screen.dart';
 
 class CityScreen extends StatefulWidget {
   @override
@@ -26,11 +27,17 @@ class _CityScreenState extends State<CityScreen> {
             children: <Widget>[
               Align(
                 alignment: Alignment.topLeft,
-                child: FlatButton(
-                  onPressed: () {},
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    size: 50.0,
+                child: MaterialButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+
+                  },
+                  child: Hero(
+                    tag: 'ani',
+                    child: Icon(
+                      Icons.arrow_back_ios,
+                      size: 50.0,color: Colors.white,
+                    ),
                   ),
                 ),
               ),
@@ -39,6 +46,7 @@ class _CityScreenState extends State<CityScreen> {
                 child: TextField(
                   style:TextStyle(color: Colors.black),
                   onChanged: (value){cityName=value;},
+
                   decoration: kTextFieldInputDecoration,
                 ),
               ),

@@ -7,8 +7,8 @@ import 'package:lottie/lottie.dart';
 import 'package:clima/utilities/constants.dart';
 import 'city_screen.dart';
 import 'package:clima/services/news.dart';
-import 'package:clima/services/networking.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'city_screen.dart';
 
 class LocationScreen extends StatefulWidget {
   LocationScreen({this.locationWeather, this.dataNews});
@@ -32,13 +32,19 @@ class _LocationScreenState extends State<LocationScreen> {
   String cityName;
   String description;
   int cloudCover;
-  double windSpeed;
+  var windSpeed;
   int humidity;
   int feelsLike;
   //for news
   String news;
   String src;
   String link;
+  String news1;
+  String src1;
+  String link1;
+  String news2;
+  String src2;
+  String link2;
 
   @override
   void initState() {
@@ -56,6 +62,12 @@ class _LocationScreenState extends State<LocationScreen> {
       news = x['articles'][0]['title'];
       src = x['articles'][0]['urlToImage'];
       link = x['articles'][0]['url'];
+      news1 = x['articles'][3]['title'];
+      src1 = x['articles'][3]['urlToImage'];
+      link1 = x['articles'][3]['url'];
+      news2 = x['articles'][2]['title'];
+      src2 = x['articles'][2]['urlToImage'];
+      link2 = x['articles'][2]['url'];
       print('$link');
     });
   }
@@ -80,7 +92,11 @@ class _LocationScreenState extends State<LocationScreen> {
       cityName = weatherData['name'];
       description = weatherData['weather'][0]['description'];
       cloudCover = weatherData['clouds']['all'];
-      windSpeed = weatherData['wind']['speed'];
+      try{
+        windSpeed = weatherData['wind']['speed'];
+      }
+      catch(e){}
+
       humidity = weatherData['main']['humidity'];
       double maxTemp = weatherData['main']['temp_max'];
       maxT = maxTemp.toInt();
@@ -90,7 +106,6 @@ class _LocationScreenState extends State<LocationScreen> {
       feelsLike = realFeels.toInt();
       weatherIcon = weather.getWeatherIcon(condition);
       weatherMessage = weather.getMessage(temperature);
-      //fornews
 
       // news = newsData['articles'][0]['title'];
     });
@@ -152,10 +167,13 @@ class _LocationScreenState extends State<LocationScreen> {
                                 updateUI(weatherData);
                               }
                             },
-                            child: Icon(
-                              Icons.add_business_rounded,
-                              color: Colors.black,
-                              size: 55,
+                            child: Hero(
+                              tag: 'ani',
+                              child: Icon(
+                                Icons.add_business_rounded,
+                                color: Colors.black,
+                                size: 55,
+                              ),
                             ),
                           )
                         ],
@@ -182,7 +200,7 @@ class _LocationScreenState extends State<LocationScreen> {
                                     style: kTempTextStyle,
                                   ),
                                   Text(
-                                    '$maxT°/$minT° Feels like $feelsLike',
+                                    '$maxT°/$minT° Feels like $feelsLike°',
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 16,
@@ -284,8 +302,8 @@ class _LocationScreenState extends State<LocationScreen> {
                                 news: news,
                                 link: link,
                               ),
-                              NewsCards(src: src, news: news, link: link),
-                              NewsCards(src: src, news: news, link: link),
+                              NewsCards(src: src1, news: news1, link: link1),
+                              NewsCards(src: src2, news: news2, link: link2),
 
                               //   Container(
                               // child: Column(
@@ -301,7 +319,8 @@ class _LocationScreenState extends State<LocationScreen> {
                               // ),
                               // )
                             ],
-                          )),
+                          )
+                      ),
                     ),
                   ],
                 ))),
@@ -362,14 +381,19 @@ class NewsCards extends StatelessWidget {
                     Future launchURL() async {
                       var url = '$link';
                       if (await canLaunch(url)) {
-                        await launch(url,
-                            forceWebView: true,);
+                        await launch(
+                          url,
+                          forceWebView: true,
+                        );
                       } else {
                         throw 'Could not launch $url';
                       }
                     }
                   },
-                  child: Text('$link'))),
+                  child: Text(
+                    '$link',
+                    style: TextStyle(color: Colors.transparent),
+                  ))),
         ],
       ),
     );

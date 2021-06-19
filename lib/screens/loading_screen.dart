@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:clima/utilities/constants.dart';
 import 'package:clima/services/networking.dart';
 import 'package:lottie/lottie.dart';
-import 'package:clima/services/news.dart';
 
 class LoadingScreen extends StatefulWidget {
   @override

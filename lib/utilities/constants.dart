@@ -28,7 +28,8 @@ const apiKey = 'bf578cae77350e81058299bb32a592f9';
 
 const kTextFieldInputDecoration = InputDecoration(
   filled: true,
-  icon: Icon(Icons.location_city),
+  focusColor: Colors.pink,
+  icon: Icon(Icons.location_city,),
   hintText: 'Enter city location',
   hintStyle: TextStyle(color: Colors.grey),
   border: OutlineInputBorder(
